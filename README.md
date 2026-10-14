@@ -48,3 +48,21 @@ The Minecraft plugin jar is written to `build/libs/playit-minecraft-plugin-$VERS
 
 ### Other links
 * https://www.spigotmc.org/resources/playit-gg.105566/
+
+
+## Folia 26.2 fork
+
+This fork targets Folia 26.2 and uses the Folia global scheduler for server-wide startup work.
+It marks the plugin as `folia-supported: true` and removes the old versioned CraftBukkit reflection paths.
+
+Build with Java 25 and Gradle 9.1+:
+
+```bash
+./gradlew clean build
+```
+
+The resulting plugin is `build/libs/playit-minecraft-plugin-0.2.0-folia.1.jar`.
+
+> The Netty pipeline injector still relies on reflection because Playit needs to add a decoder to
+> Minecraft's inbound connection pipeline. The injector is written against modern Mojang-mapped
+> `ServerConnectionListener`/`CraftServer` names and deliberately avoids old `v1_XX_RX` package names.
