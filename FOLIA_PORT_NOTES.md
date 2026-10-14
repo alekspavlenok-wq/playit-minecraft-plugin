@@ -14,6 +14,9 @@ This is the first Folia 26.2 port of the supplied `playit-minecraft-plugin-0.2.0
 - Removed dependence on old `v1_XX_RX` CraftBukkit package names.
 - Relaxed discovery of the server listener's `ChannelFuture` list so it does not depend on generic-signature metadata.
 - Added a fork version `0.2.0-folia.1`.
+- Enabled TCP_NODELAY and keepalive on both sides of the TCP relay, with explicit connect timeouts and a bounded Netty worker pool.
+- Added configurable UDP tunnels for raw UDP services such as Simple Voice Chat and Minecraft Bedrock/Geyser, including Playit UDP-channel authentication and packet forwarding.
+- Added `/playit tunnel list` for displaying active additional tunnel addresses.
 
 ## Build
 

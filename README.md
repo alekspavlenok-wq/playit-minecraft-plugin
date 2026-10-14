@@ -63,6 +63,31 @@ Build with Java 25 and Gradle 9.1+:
 
 The resulting plugin is `build/libs/playit-minecraft-plugin-0.2.0-folia.1.jar`.
 
+### Lower-latency TCP relay
+
+The relay enables `TCP_NODELAY` for both the Playit-to-plugin and plugin-to-Minecraft sockets. This avoids delaying small game packets while waiting for Nagle's algorithm to batch them. The relay uses up to four Netty I/O threads to avoid starting an unnecessarily large worker pool on high-core hosts. The final ping still depends on the Playit route and the player's network.
+
+### Additional UDP tunnels
+
+Add entries under `additional-tunnels` in `plugins/playit-gg/config.yml`. The plugin creates the matching Playit tunnel and forwards its UDP traffic to the configured local address.
+
+```yaml
+additional-tunnels:
+  - name: Simple Voice Chat
+    type: udp
+    local-ip: 127.0.0.1
+    local-port: 24454
+    description: Simple Voice Chat
+    region: global
+  - name: Geyser
+    type: minecraft-bedrock
+    local-ip: 127.0.0.1
+    local-port: 19132
+    region: global
+```
+
+Use the UDP address shown by `/playit tunnel list` in the Simple Voice Chat configuration, and make sure Geyser is listening on the configured UDP port. `type: udp` creates a one-port raw UDP tunnel; `type: minecraft-bedrock` creates a Playit Bedrock tunnel. Supported region values are the Playit region names, such as `global`, `europe`, and `poland`. A tunnel only appears in the list after Playit reports it active.
+
 > The Netty pipeline injector still relies on reflection because Playit needs to add a decoder to
 > Minecraft's inbound connection pipeline. The injector is written against modern Mojang-mapped
 > `ServerConnectionListener`/`CraftServer` names and deliberately avoids old `v1_XX_RX` package names.
